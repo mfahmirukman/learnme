@@ -1,0 +1,81 @@
+table class="table table-bordered">
+                
+                <thead >
+                <tr>
+                	<th>Course Name</th>
+                	<th>Reading Material</th>
+                	<th>Supporting Material</th>
+                </tr>
+
+               	</thead>
+                @foreach($courses as $course)
+               	<tbody>
+               		
+               		<tr>
+               			<td>{{$course->name}}</td>
+               			<td>
+                    {!! link_to_route('detail_courses', 'Available')!!}
+                    </td>
+
+               			<td>{!! link_to_route('support_courses', 'Available')!!}</td>
+               		</tr>
+               		
+               	</tbody>
+                @endforeach
+                </table>
+
+
+
+
+
+@foreach($courses as course)
+                <div class="row">
+                <div class="col-md-4">
+                  <div class="jumbotron">
+                  <p>{{$course->name}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                <div class="jumbotron">
+                  {!! link_to_route('detail_courses', 'Available')!!}
+                  </div>
+                  </div>
+                <div class="col-md-4">
+                <div class="jumbotron">
+                  {!! link_to_route('support_courses', 'Available')!!}
+                  </div>
+                  </div>
+                  @endforeach
+
+
+
+<div class="well">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">{{$thread->title}}</h4>
+                                <p class="text-right">By: {{$thread->user->name}}</p>
+                                <p>{{$thread->body}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+$threads = Thread::select('threads.title', 'threads.body', 'course_name.name', 'classes.class_name', 'users.name')
+        ->join('course_name', 'course_name.id', '=', 'threads.id')
+        ->join('users', 'users.id', '=', 'threads.name_id')
+        ->join('classes', function($join){
+            $join->on('classes.id', '=', 'users.class_id');
+        })
+        ->join('users', 'users.id', '=', 'threads.name_id')
+        ->orderBy('created_at', 'desc')
+        ->get();
